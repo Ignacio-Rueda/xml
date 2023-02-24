@@ -1,0 +1,19 @@
+<!ENTITY % direccion "calle,numero">
+<!ELEMENT pedido (Datos_Establecimiento, Nombre_Empleado,Fecha,articulos)>
+<!ATTLIST pedido cod_ped NMTOKEN #REQUIRED>
+<!ATTLIST pedido tipo_envio (Normal | Urgente) #REQUIRED>
+<!ELEMENT Datos_Establecimiento (Nombre,Direccion_Envio,Direccion_Almacen?)>
+<!ELEMENT Nombre (#PCDATA)>
+<!ELEMENT Direccion_Envio (%direccion;)>
+<!ELEMENT Direccion_Almacen (%direccion;)>
+<!ELEMENT calle (#PCDATA)>
+<!ELEMENT numero (#PCDATA)>
+<!ELEMENT Nombre_Empleado (#PCDATA)>
+<!ELEMENT Fecha (#PCDATA)>
+<!ELEMENT articulos (articulo)+>
+<!ELEMENT articulo (unidades,precio_unidad,observaciones*)>
+<!ATTLIST articulo codigo NMTOKEN #REQUIRED>
+<!ELEMENT unidades (#PCDATA)>
+<!ELEMENT observaciones (#PCDATA)>
+<!ELEMENT precio_unidad (#PCDATA)>
+<!ATTLIST precio_unidad moneda NMTOKEN #FIXED "Euro">

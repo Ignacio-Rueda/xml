@@ -1,0 +1,14 @@
+<!ENTITY % datos_familia "nombre, apellido,apellido, dni?,edad?">
+<!ELEMENT familia (((padre?,madre)|(padre|madre)|((padre,padre) | (madre,madre))),hijos)>
+<!ELEMENT hijos (hijo|hija)+>
+<!ELEMENT padre (%datos_familia;)>
+<!ELEMENT madre (%datos_familia;)>
+<!ELEMENT hijo (%datos_familia;)>
+<!ELEMENT hija (%datos_familia;)>
+<!ELEMENT nombre (#PCDATA)>
+<!ELEMENT apellido (#PCDATA)>
+<!ELEMENT dni (#PCDATA)>
+<!ELEMENT edad (#PCDATA)>
+<!ATTLIST hijo pos NMTOKEN #REQUIRED>
+<!ATTLIST hija pos NMTOKEN #REQUIRED>
+<!ATTLIST familia codigo NMTOKEN #REQUIRED>

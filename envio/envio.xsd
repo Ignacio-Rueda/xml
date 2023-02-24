@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    
+    <xs:annotation>
+        <xs:documentation xml:lang="es-es">
+            <titulo>envio</titulo>
+            <modulo>Lenguajes de marcas y sistemas de gestión de información</modulo>
+            <alumno>Ignacio Rueda Delgado</alumno>
+        </xs:documentation>
+    </xs:annotation>
+    
+    <xs:annotation>
+        <xs:documentation>
+            DEFINICIÓN ELEMENTOS SIMPLES
+        </xs:documentation>
+        
+    </xs:annotation>
+    <xs:element name="identidad" type="xs:string"/>
+    <xs:element name="via" type="xs:string"/>
+    <xs:element name="fecha" type="xs:date"/>
+    <xs:element name="hora" type="xs:time"/>
+    <xs:element name="comentario" type="xs:string"/>
+    
+    <xs:annotation>
+        <xs:documentation>
+            DEFINICIÓN ELEMENTOS COMPLEJOS (ELEMENTOS CON ATRIBUTOS) 
+        </xs:documentation>
+    </xs:annotation>
+    <xs:annotation>
+        <xs:documentation>
+            El tipo de dato utilizado es string en lugar de positiveInteger o integer 
+            porque si no en la validación obtendría error al encontrar vacío el numero de  contrato
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="num_contrato">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attributeGroup ref="Att.Contrato"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="Att.Contrato">
+         <xs:annotation>
+        <xs:documentation>
+         No es necesario utilizar use="optional"
+         porque por defecto toma ese valor
+        </xs:documentation>
+    </xs:annotation>
+        <xs:attribute name="tipo" type="tipoContrato"/>
+    </xs:attributeGroup>
+    <xs:simpleType name="tipoContrato">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="básico"/>
+            <xs:enumeration value="avanzado"/>
+            <xs:enumeration value="completo"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:element name="poblacion">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="cp" type="xs:positiveInteger" use="required"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>  
+
+    <xs:element name="provincia">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:annotation>
+                    <xs:documentation>
+                        He decidido que el atributo  país sea obligatorio,si se quisieramos que fuese opcional
+                        simplemente no hubiese indicado nada, ya que por defecto toma el valor de opcional.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="pais" type="xs:string" fixed="España" use="required"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:annotation>
+        <xs:documentation>
+            Para la creación de un identificador único,aunque pueda repetirse,
+            se crea una restricción para validar un DNI Es decir, una restricción
+            que limite 8 dígitos y una sola letra en mayúscula.
+            No indico use="optional" porque es el valor que adquiere por defecto.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="nombre_completo">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attributeGroup ref="Att.id"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="Att.id">
+        <xs:attribute name="id" type="dniPersona"/>
+    </xs:attributeGroup>
+    <xs:simpleType name="dniPersona">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d{8}[A-Z]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:annotation>
+        <xs:documentation>
+            DEFINICIÓN ELEMENTOS COMPLEJOS (ELEMENTOS QUE CONTIENEN OTROS ELEMENTOS)
+        </xs:documentation>
+    </xs:annotation>
+    
+    <xs:element name="emisor">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:annotation>
+                    <xs:documentation>
+                        Tener en cuenta que los atributos minOccurs y maxOccurs, por defecto están inicializados a 1.
+                        En el caso de permitir la posibilidad de que no aparezca un elemento, minOccurs=0.
+                        En el caso de permitri la posibilidad de que aparezca muchas veces un elemento, maxOccurs="unbounded"
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:element ref="identidad" maxOccurs="unbounded"/>
+                <xs:element ref="num_contrato" minOccurs="0"/>
+                <xs:element ref="ubicacion" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="ubicacion">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="via"/>
+                <xs:element ref="poblacion"/>
+                <xs:element ref="provincia" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="intento">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="fecha"/>
+                <xs:element ref="hora" minOccurs="0"/>
+                <xs:element ref="comentario" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="recepcionado" use="required">
+            <xs:annotation>
+                <xs:documentation>
+                    Considero que el atributo debe ser obligatorio porque debemos reflejar de algún modo
+                    si el paquete ha sido entregado o no.
+                </xs:documentation>
+            </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="sí"/>
+                        <xs:enumeration value="no"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="receptor">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="nombre_completo"/>
+                <xs:element ref="ubicacion"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:annotation>
+        <xs:documentation>
+            DEFINICIÓN ELEMENTO RAÍZ
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="envio">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="emisor"/>
+                <xs:element ref="intento" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="receptor"/>
+            </xs:sequence>
+            <xs:attribute name="cod" use="required">
+                <xs:simpleType>
+                    <xs:annotation>
+                        <xs:documentation>
+                            Se tiene que crear una restricción para el atributo "cod" de envío,
+                            que permita solamente dos caracteres de entre (NA-RE-PR-LO) 1 dígito entre
+                            0 y 3 y 4 dígitos entre 0000-9999.Mediante pattern, creamos 4 posibilidades,cada una de ellas
+                            con los mismos dígitos pero con los distintos caracteres determinados en el ejercicio. 
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:restriction base="xs:ID">
+                        <xs:pattern value="NA[0-3][0-9]{4}|RE[0-3][0-9]{4}|PR[0-3][0-9]{4}|LO[0-3][0-9]{4}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

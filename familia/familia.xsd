@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <!--ELEMENTOS SIMPLES-->
+    <xs:element name="nombre" type="n_caracter"/>
+    <xs:element name="apellido" type="n_caracter"/>
+    <xs:element name="dni" type="xs:string"/>
+    <xs:element name="edad" type="xs:positiveInteger"/>
+    <xs:element name="num">
+        <xs:simpleType>
+            <xs:restriction base="xs:decimal">
+                <xs:totalDigits value="3"/>
+                <xs:fractionDigits value="3"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+<!--ELEMENTOS CREADOS POR EL USUARIO -->
+    <xs:simpleType name="n_caracter">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="30"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="att.pos">
+        <xs:restriction base="xs:positiveInteger">
+            <xs:maxInclusive value="30"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="att.codigo">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]{1}[0-9]{2}\-[0-9]{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <!--DEFINICIÓN ELEMENTOS COMPLEJOS-->
+    <xs:complexType name="datos_familia">
+        <xs:sequence>
+            <xs:element ref="nombre"/>
+            <xs:element ref="apellido" minOccurs="2" maxOccurs="2"/>
+            <xs:element ref="dni" minOccurs="0"/>
+            <xs:element ref="edad" minOccurs="0"/>
+            <xs:element ref="num" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="datos_hijos">
+        <xs:complexContent>
+            <xs:extension base="datos_familia">
+                <xs:attribute name="pos" type="att.pos"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:element name="hijos">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element name="hijo" type="datos_hijos" minOccurs="0"/>
+                <xs:element name="hija" type="datos_hijos" minOccurs="0"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    
+    <!--DEFINICIÓN ELEMENTO RAÍZ-->
+    
+    <xs:element name="familia">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice maxOccurs="2">
+                    <xs:element name="padre" type="datos_familia" />
+                    <xs:element name="madre" type="datos_familia" />
+                </xs:choice>
+                <xs:element ref="hijos"/>
+            </xs:sequence>
+            <xs:attribute name="codigo" type="att.codigo"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <!--DEFINICIÓN ELEMENTOS SIMPLES -->
+    <xs:element name="Nombre" type="xs:string"/>
+    <xs:element name="calle" type="xs:string"/>
+    <xs:element name="numero" type="xs:positiveInteger"/>
+    <xs:element name="Nombre_Empleado" type="xs:string"/>
+    <xs:element name="unidades" type="xs:positiveInteger"/>
+    <xs:element name="observaciones" type="xs:string"/>
+    <xs:element name="Fecha" type="xs:date"/>
+       <!--DEFINICIÓN ELEMENTOS POR EL USUARIO -->
+    
+    <xs:attribute name="cod_ped">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:pattern value="[A-Z]{1}[0-9]{6}\-[0-9]{2}"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+    
+    <xs:attribute name="tipo_envio">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="Normal"/>
+                <xs:enumeration value="Urgente"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+    
+    <xs:element name="precio_unidad">
+        <xs:complexType>
+            <xs:simpleContent> 
+                <xs:extension base="xs:decimal">
+                    <xs:attribute name="moneda" type="xs:string" fixed="Euro"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <!--DEFINICIÓN ELEMENTOS COMPLEJOS -->
+    <xs:complexType name="direccion">
+        <xs:sequence>
+            <xs:element ref="calle"/>
+            <xs:element ref="numero"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="Datos_Establecimiento">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Nombre"/>
+                <xs:element name="Direccion_Envio" type="direccion"/>
+                <xs:element name="Direccion_Almacen" type="direccion" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="articulo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="unidades"/>
+                <xs:element ref="precio_unidad"/>
+                <xs:element ref="observaciones" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute ref="codigo" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:attribute name="codigo">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:pattern value="[A-Z]{3}[0-9]{3}"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+    
+    <xs:element name="articulos">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="articulo" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="pedido">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Datos_Establecimiento"/>
+                <xs:element ref="Nombre_Empleado"/>
+                <xs:element ref="Fecha"/>
+                <xs:element ref="articulos"/>
+            </xs:sequence>
+            <xs:attribute ref="cod_ped" use="required"/>
+            <xs:attribute ref="tipo_envio" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

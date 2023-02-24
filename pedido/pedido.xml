@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<!DOCTYPE pedido SYSTEM "pedido.dtd">-->
+<pedido xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="pedido.xsd"
+        cod_ped="E180021-17" tipo_envio="Normal">
+    <Datos_Establecimiento>
+        <Nombre>Llegaya</Nombre>
+        <Direccion_Envio>
+            <calle>Calle Espinosa</calle>
+            <numero>25</numero>
+        </Direccion_Envio>
+        <Direccion_Almacen>
+            <calle></calle>
+            <numero>1</numero>
+        </Direccion_Almacen>
+    </Datos_Establecimiento>
+    <Nombre_Empleado>Ignacio Rueda</Nombre_Empleado>
+    <Fecha>1989-10-26</Fecha>
+    <articulos>
+        <articulo codigo="ZZZ134">
+            <unidades>2</unidades>
+            <precio_unidad moneda="Euro">2.50</precio_unidad>
+            <observaciones>Tiene prisa</observaciones>
+        </articulo>
+    </articulos>
+</pedido>
